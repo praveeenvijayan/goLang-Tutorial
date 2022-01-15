@@ -15,7 +15,8 @@ type course struct {
 
 func main() {
 	fmt.Println("welcome to json video")
-	EncodedJson()
+	// EncodedJson()
+	DecodeJson()
 }
 func checkErr(err error) {
 	if err != nil {
@@ -36,4 +37,34 @@ func EncodedJson() {
 	finalJson, err := json.MarshalIndent(lcoCourses, "", "\t")
 	checkErr(err)
 	fmt.Printf("%s\n", finalJson)
+}
+
+func DecodeJson() {
+	jsonDataFromWeb := []byte(`
+	{
+		"coursename": "Mern Bootcam",
+		"Price": 199,
+		"website": "lco.in",
+		"tags": ["full-stack", "js"]
+	}
+	`)
+	var lcoCourse course
+
+	checkValid := json.Valid(jsonDataFromWeb)
+	if checkValid {
+		fmt.Println("JSON Was Valid")
+		json.Unmarshal(jsonDataFromWeb, &lcoCourse)
+		fmt.Printf("%#v\n", lcoCourse)
+	} else {
+		fmt.Println("json is not valid")
+	}
+
+	// some cases where you want to add data to a key value pair
+	var myOnlineData map[string]interface{}
+	json.Unmarshal(jsonDataFromWeb, &myOnlineData)
+	fmt.Printf("%#v\n", myOnlineData)
+
+	for key, value := range myOnlineData {
+		fmt.Printf("key is %v and value id %v and type is %T\n", key, value, value)
+	}
 }
